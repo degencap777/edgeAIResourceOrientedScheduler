@@ -1,0 +1,64 @@
+{
+  "kind": "Policy",
+  "apiVersion": "v1",
+  "predicates": [
+    {
+      "name": "PodFitsHostPorts"
+    },
+    {
+      "name": "PodFitsResources"
+    },
+    {
+      "name": "NoDiskConflict"
+    },
+    {
+      "name": "MatchNodeSelector"
+    },
+    {
+      "name": "HostName"
+    }
+  ],
+  "priorities": [
+    {
+      "name": "LeastRequestedPriority",
+      "weight": 1
+    },
+    {
+      "name": "BalancedResourceAllocation",
+      "weight": 1
+    },
+    {
+      "name": "ServiceSpreadingPriority",
+      "weight": 1
+    },
+    {
+      "name": "EqualPriority",
+      "weight": 1
+    }
+  ],
+  "extenders": [
+    {
+      "urlPrefix": "https://10.96.0.255:443/scheduler",
+      "filterVerb": "predicates",
+      "bindVerb": "",
+      "managedResources": [
+        {
+          "name": "kmb.intel.com/vpu",
+          "ignoredByScheduler": false
+        },
+        {
+          "name": "kmb.intel.com/codec",
+          "ignoredByScheduler": false
+        }
+      ],
+      "weight": 1,
+      "enableHttps": true,
+      "tlsConfig": {
+        "Insecure": false,
+	      "CAData":"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMrekNDQWVPZ0F3SUJBZ0lVZXVVRTdjaFpaeit1WWNWQzVMYWxPZmM2b3lVd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0RURUxNQWtHQTFVRUF3d0NZMkV3SGhjTk1qQXdPREU1TURNMU16VTBXaGNOTWpFd09ERTVNRE0xTXpVMApXakFOTVFzd0NRWURWUVFEREFKallUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCCkFLZEVLdU5hcVNjb3J3SEFQdlhnNFhuOXBJbDNUWXBiS21Vcjd1T3RWK1FWOFlYSGRIeTh4T004VEZ2ZFM3djgKMDBJSk5ETkhZSWhvTTZTcVJQcWRWWDlYSEE1ZDZ1d1UwaGJpdFhlUmZnQVhscHdTenFvVlNnZkdmZmllbHdsVgpWOEtwd1JHbDhnc3VORmNRekFMK2FYZzAzWTlNWk1DVVl2SmthanVMbVNpd0N0L3NvZGxtd3JVTjFhNVQ5bG5OCitJVzNVMHU1dTJaTC9mR29WOWZtU1FtZHVrdzJxTDBRTVMxZnhzNm02SFEzdHJ1ME5xanBtdHZqWGQzZzJPZ2wKTC8rc1o0dktENDZzbmh3dE5TNExrcDVKSmNwWXJMaXBycTRpT1V4VTdvbE5aRS9vVTdKQ0pRNVUrbFVVN1o2bwpXT2thclY0SVNQWjhkeUF5VVcvSjh2Y0NBd0VBQWFOVE1GRXdIUVlEVlIwT0JCWUVGTkl6QzlsbkR0a3owc1ZUCk9Gdlc0RSs5U1JVOU1COEdBMVVkSXdRWU1CYUFGTkl6QzlsbkR0a3owc1ZUT0Z2VzRFKzlTUlU5TUE4R0ExVWQKRXdFQi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFCanRYd2V4RFBqcUdTNEo3aUR3V0tLdgpZdmg5NEdBN0k2V2R0czI1NU1TQVQrdXpqQ3M3NFFIdkxQbTFtcCtudEY5QncwSkFGZjJEMjhwNW80NFI1NVlXCkNqVE1qRWRmTTNlSHo0YWtPc1RlUE4yUGZQbHM5Vi83Y3lVOE14UzZvWS9kRW0xRUYyV2U4SGpFOHFOeENRTnoKV0FMdDJJUkpyZFErc2dUNVZLWWV4eXFrdjdjZ1VJcDFvMWdYeHA4MTJMVWNmbGJmSGNrclRXZlprNDVPTEl0SQpHUDd3SmVWM1RweTZiVVZHeTcveVZ0NWUxZk9LaVU2eS8vcTNpMStaT0x3ems1K3ljclhkVHh5SlJxbGR0aDVCCkFDTnlmcFBhSkJYNG85Ynh5cEE2Ym42YzZEOGs3b2g5emYrZ2ZpR1A3QWM2WVY5Q2VsREZrendzMDFGdnhJWT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+      },
+      "nodeCacheCapable": false
+    }
+  ],
+  "hardPodAffinitySymmetricWeight": 10
+}

@@ -1,0 +1,8 @@
+apiVersion: kubescheduler.config.k8s.io/v1alpha1
+kind: KubeSchedulerConfiguration
+clientConnection:
+   kubeconfig: "/var/lib/rancher/k3s/server/cred/scheduler.kubeconfig"
+algorithmSource:
+  policy:
+    file:
+      path: "/etc/edge-ai/scheduler/sched-policy-k3s.json"
