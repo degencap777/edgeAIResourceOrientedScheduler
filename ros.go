@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"strconv"
 	"errors"
+	"crypto/tls"
 )
 
 type DescribedObject struct {
@@ -212,8 +213,24 @@ func main() {
 	router := httprouter.New()
 	router.POST(predicatesPath, PredicateRoute())
 
-	log.Print("ROS starting on port :443")
-	if err := http.ListenAndServeTLS(":443", "/var/run/serving-cert/server.crt", "/var/run/serving-cert/server.key", router); err != nil {
-		log.Fatal(err)
+	cfg := &tls.Config{
+		MinVersion:               tls.VersionTLS12,
+		MaxVersion:               tls.VersionTLS12,
+		CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
+		PreferServerCipherSuites: true,
+		CipherSuites: []uint16{
+			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+		},
 	}
+
+	server := &http.Server{
+		Addr:         ":443",
+		Handler:      router,
+		TLSConfig:    cfg,
+		TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
+	}
+
+	log.Print("ROS starting on port :443")
+	log.Fatal(server.ListenAndServeTLS("/var/run/serving-cert/server.crt", "/var/run/serving-cert/server.key"))
+
 }
