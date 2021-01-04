@@ -16,6 +16,9 @@ import (
 	"strconv"
 	"errors"
 	"crypto/tls"
+	"crypto/x509"
+	"io/ioutil"
+
 )
 
 type DescribedObject struct {
@@ -213,6 +216,16 @@ func main() {
 	router := httprouter.New()
 	router.POST(predicatesPath, PredicateRoute())
 
+        caCert, err := ioutil.ReadFile("/var/run/serving-cert/ca.crt")
+        if err != nil {
+                log.Fatal(err)
+        }
+        caCertPool := x509.NewCertPool()
+        ok := caCertPool.AppendCertsFromPEM(caCert)
+        if !ok {
+                log.Fatal(ok)
+        }
+
 	cfg := &tls.Config{
 		MinVersion:               tls.VersionTLS12,
 		MaxVersion:               tls.VersionTLS12,
@@ -222,6 +235,8 @@ func main() {
 			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
 			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
 		},
+		ClientCAs: caCertPool,
+		ClientAuth: tls.RequireAndVerifyClientCert,
 	}
 
 	server := &http.Server{
